@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, Switch, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { getDatabase, ref, update } from 'firebase/database';
+import { getDatabase, ref, update, push } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 
 const DeviceDetailsScreen = ({ route, navigation }) => {
   const { device, onUpdate } = route.params;
@@ -67,9 +68,25 @@ const DeviceDetailsScreen = ({ route, navigation }) => {
 
     const db = getDatabase();
     const deviceRef = ref(db, `devices/${device.id}`);
-  
+
     update(deviceRef, updatedDevice)
       .then(() => {
+        // Record log in Firebase Realtime Database
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        const logRef = ref(db, 'logs');
+        const logData = {
+          user: user ? user.email : 'Anonymous',
+          deviceName: roomName,
+          isAutomatic,
+          updatedAt: new Date().toISOString(),
+        };
+
+        push(logRef, logData)
+          .then(() => console.log('Log recorded successfully.'))
+          .catch((error) => console.error('Error recording log:', error));
+
         onUpdate(updatedDevice);
         navigation.goBack();
       })

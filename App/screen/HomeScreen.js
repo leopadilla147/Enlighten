@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
           <Button title="Devices" onPress={() => navigation.navigate('Devices')} />
         </View>
         <View style={styles.buttonContainer}>
-          <Button title="Reports" onPress={() =>  {/*navigation.navigate('Reports')*/}} /> 
+           <Button title="Logs" onPress={() => navigation.navigate('Logs')} />  
         </View>
       </View>
     </View>

@@ -1,5 +1,5 @@
 import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth'; // Make sure auth is imported
+import 'firebase/compat/auth';
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
